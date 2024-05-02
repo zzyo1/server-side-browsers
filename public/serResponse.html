@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Display Response Headers</title>
+</head>
+<body>
+    <h1>Response Headers</h1>
+    <pre id="headers"></pre>
+
+    <script>
+        fetch('https://browshot.com/') // 여기에 서버의 URL을 넣으세요.
+            .then(response => {
+                const headers = Array.from(response.headers.entries());
+                let headersString = '';
+                headers.forEach(header => {
+                    headersString += `${header[0]}: ${header[1]}\n`;
+                });
+                document.getElementById('headers').textContent = headersString;
+            })
+            .catch(error => {
+                console.error('Fetching failed:', error);
+                document.getElementById('headers').textContent = 'Cannot load headers, see console for more details.';
+            });
+    </script>
+</body>
+</html>

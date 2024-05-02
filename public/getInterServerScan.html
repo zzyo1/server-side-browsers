@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Scanning</title>
+</head>
+<body>
+
+<h3>1200-1300 Scan port Start!!!</h3>
+
+<div id="openPortsSummary"></div>
+<div id="openPortsList"></div>
+<div id="portScan"></div>
+
+<script>
+    const openPorts = [];
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    const PORTS_PER_BATCH = 100;
+    let startPort = 1200;  //1;
+    let lastPort  = 1300;  //65535;
+
+    const checkPortOpen = async (host, port) => {
+        try {
+            await fetch(`http://${host}:${port}`, { mode: 'no-cors' });
+            openPorts.push(port);
+            document.getElementById('portScan').innerHTML += `<span style="color:red;">Port ${port} is open.</span><br>`;
+        } catch (error) {
+            document.getElementById('portScan').innerHTML += `Port ${port} is not open or not accessible from the browser.<br>`;
+        }
+    };
+    
+    const scanBatchOfPorts = async (start, end) => {
+        const batchPromises = [];
+        for (let port = start; port <= end; port++) {
+            batchPromises.push(checkPortOpen('localhost', port));
+        }
+        await Promise.all(batchPromises);
+        //await delay(10);  // 10ms delay between each batch
+    };
+
+    const scanAllPorts = async () => {
+
+        for (let port = startPort; port <= lastPort; port += PORTS_PER_BATCH) {
+            await scanBatchOfPorts(port, Math.min(port + PORTS_PER_BATCH - 1, lastPort));
+        }
+        document.getElementById('openPortsSummary').innerHTML = `<strong>Total Open Ports:</strong> ${openPorts.length}`;
+        document.getElementById('openPortsList').innerHTML = `<strong>Open Ports:</strong> ${openPorts.join(', ')}`;
+    }
+
+    scanAllPorts();
+
+</script>
+
+</body>
+</html>

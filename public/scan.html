@@ -1,0 +1,42 @@
+<html>
+<head>
+  <script src="webscan.js"></script>
+</head>
+<body>
+
+<pre id="content">
+</pre>
+
+<script>
+  
+window.addEventListener('load', async function()
+{
+  // logging function
+  let log = function(line)
+  {
+    //console.log(line)
+    document.getElementById('content').innerHTML += line + '\n'
+  }
+
+  let insertLogBeforeStart = function(line) {
+    let contentElem = document.getElementById('content');
+    let startIndex = contentElem.innerHTML.indexOf('webScanAll() started');
+    contentElem.innerHTML = contentElem.innerHTML.substring(0, startIndex) + line + '\n' + contentElem.innerHTML.substring(startIndex);
+  }
+
+  let ipsToScan = undefined
+  let scan = await webScanAll(
+    ipsToScan, // array. if undefined, scan major subnet gateways, then scan live subnets. supports wildcards
+    {
+      rtc: true,   // use webrtc to detect local ips
+      logger: log, // logger callback
+      localCallback:   function(ip) { console.log(`local ip callback: ${ip}`)   },
+      networkCallback: function(ip) { console.log(`network ip callback: ${ip}`) },
+    }
+  )
+  log(JSON.stringify(scan, null, 2))
+  insertLogBeforeStart(`<b><span style='color: tomato;'>local IPs: ${scan.local.join(', ')}</span></b>`);
+})
+</script>
+</body>
+</html>
