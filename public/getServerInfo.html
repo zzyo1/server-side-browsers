@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Information</title>
+</head>
+<body>
+
+<div id="info"></div>
+
+<script>
+    function appendInfo(text) {
+        document.getElementById('info').innerHTML += text + '<br>';
+    }
+
+    // Navigator 정보
+    appendInfo("User Agent: " + navigator.userAgent);
+    appendInfo("Platform: " + navigator.platform);
+    appendInfo("User Language: " + (navigator.language || navigator.userLanguage));
+    appendInfo("CPU Cores: " + navigator.hardwareConcurrency);
+
+    // Screen 정보
+    appendInfo("Screen Width: " + screen.width);
+    appendInfo("Screen Height: " + screen.height);
+    appendInfo("Available Screen Width: " + screen.availWidth);
+    appendInfo("Available Screen Height: " + screen.availHeight);
+    appendInfo("Color Depth: " + screen.colorDepth);
+
+    // Battery Status (비동기)
+    if (navigator.getBattery) {
+        navigator.getBattery().then(function(battery) {
+            appendInfo("Battery Level: " + (battery.level * 100) + "%");
+            appendInfo("Battery Charging: " + (battery.charging ? "Yes" : "No"));
+        });
+    }
+
+    // Device Memory (일부 브라우저에서만 지원)
+    if (navigator.deviceMemory) {
+        appendInfo("Device Memory: " + navigator.deviceMemory + "GB");
+    }
+
+    // Network Information (일부 브라우저에서만 지원)
+    if (navigator.connection) {
+        appendInfo("Network Type: " + navigator.connection.effectiveType);
+        appendInfo("Downlink Speed: " + navigator.connection.downlink + "Mbps");
+    }
+
+    // WebGL 정보 (그래픽 카드 정보)
+    var canvas = document.createElement('canvas');
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (gl) {
+        var renderer = gl.getParameter(gl.RENDERER);
+        var vendor = gl.getParameter(gl.VENDOR);
+        appendInfo("WebGL Renderer: " + renderer);
+        appendInfo("WebGL Vendor: " + vendor);
+    } else {
+        appendInfo("WebGL not supported");
+    }
+
+    // Geolocation
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            appendInfo("Latitude: " + position.coords.latitude);
+            appendInfo("Longitude: " + position.coords.longitude);
+        });
+    }
+
+    // Device Orientation
+    window.addEventListener("deviceorientation", function(event) {
+        appendInfo("Alpha (Orientation around Z axis): " + event.alpha);
+        appendInfo("Beta (Orientation around X axis): " + event.beta);
+        appendInfo("Gamma (Orientation around Y axis): " + event.gamma);
+    });
+
+    // Performance API
+    var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance;
+    if (performance) {
+        appendInfo("Navigation Start Time: " + performance.timing.navigationStart);
+        // ... you can add other performance metrics if needed
+    }
+
+    // Clipboard API (Requires user interaction and permission)
+    if (navigator.clipboard) {
+        navigator.clipboard.readText().then(clipText => 
+            appendInfo("Clipboard Content: " + clipText)).catch(err => 
+            appendInfo("Could not access clipboard: " + err));
+    }
+
+    // Media Devices (Camera & Microphone)
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+        navigator.mediaDevices.enumerateDevices().then(devices => {
+            devices.forEach(device => {
+                appendInfo(device.kind + ": " + device.label);
+            });
+        }).catch(err => {
+            appendInfo("Error accessing media devices: " + err);
+        });
+    }
+
+    // Vibration API (For demonstration purposes, will vibrate the device if supported)
+    if ("vibrate" in navigator) {
+        navigator.vibrate(100);
+        appendInfo("Device vibrated for 100ms (if supported)");
+    }
+
+    // Touch Events (Will display if touch is supported)
+    if ('ontouchstart' in window) {
+        appendInfo("Touch is supported on this device");
+    }    
+
+    // Cookies
+    var cookies = document.cookie;
+    appendInfo("Cookies: " + cookies);
+
+    // Online/Offline Status
+    var onlineStatus = navigator.onLine ? "Online" : "Offline";
+    appendInfo("Online Status: " + onlineStatus);
+
+    // Web Storage
+    var localStorageData = localStorage.getItem("someKey");
+    var sessionStorageData = sessionStorage.getItem("someKey");
+    appendInfo("LocalStorage Data for 'someKey': " + localStorageData);
+    appendInfo("SessionStorage Data for 'someKey': " + sessionStorageData);
+
+    // Permissions API (Example: Geolocation permission)
+    if (navigator.permissions) {
+        navigator.permissions.query({name: 'geolocation'}).then(function(permissionStatus) {
+            appendInfo("Geolocation Permission: " + permissionStatus.state);
+        });
+    }
+
+    // Gamepad API (Will display if gamepad is connected)
+    var gamepads = navigator.getGamepads();
+    if (gamepads[0]) {
+        appendInfo("Gamepad Connected: " + gamepads[0].id);
+    }
+
+    // Ambient Light Sensor (Requires user permission and may not be supported on all devices/browsers)
+    if ('AmbientLightSensor' in window) {
+        const sensor = new AmbientLightSensor();
+        sensor.onreading = () => {
+            appendInfo("Ambient Light: " + sensor.illuminance + " lux");
+        };
+        sensor.onerror = (event) => {
+            appendInfo("Ambient Light Sensor Error: " + event.error.name);
+        };
+        sensor.start();
+    }
+
+    // Timezone
+    var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    appendInfo("Timezone: " + timezone);
+
+    // Memory API
+    if (navigator.deviceMemory) {
+        appendInfo("Device Memory: " + navigator.deviceMemory + "GB");
+    }
+
+    // Concurrency (Logical Processors)
+    appendInfo("Logical Processors: " + navigator.hardwareConcurrency);
+
+    // User Preferences
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        appendInfo("User prefers dark theme");
+    } else {
+        appendInfo("User prefers light theme");
+    }
+
+    // Network Information API
+    if (navigator.connection) {
+        appendInfo("Network Type: " + navigator.connection.type);
+        appendInfo("Effective Connection Type: " + navigator.connection.effectiveType);
+    }
+
+    // Full Screen API (For demonstration purposes, will request full screen on click)
+    document.body.addEventListener('click', function() {
+        if (document.fullscreenEnabled) {
+            document.documentElement.requestFullscreen();
+        }
+    });
+    appendInfo("Click anywhere on the page to request full screen (if supported)");
+
+
+
+</script>
+
+</body>
+</html>

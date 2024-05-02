@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Browser Security Test Page</title>
+</head>
+<body>
+    <h1>Browser Security Feature Test</h1>
+    <div id="testResult">Testing...</div>
+
+    <script>
+        // Function to test CORS policy
+        function testCORS() {
+            fetch('https://google.com')
+                .then(function(response) {
+                    // If the request succeeds, it might indicate that security features like CORS are disabled
+                    document.getElementById('testResult').textContent = 'CORS Request succeeded: Security features might be disabled.';
+                })
+                .catch(function(error) {
+                    // If the request fails, it likely means that CORS policy is enforced
+                    document.getElementById('testResult').textContent = 'CORS Request failed: Security features are likely enabled.';
+                });
+        }
+
+        // Execute the test as soon as the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', testCORS);
+    </script>
+</body>
+</html>

