@@ -83,14 +83,12 @@ if (url == null ) url='http://google.com'; // 'file://F://GGG//openSW//init_1.js
   await page.setViewport({ width:1280, height: 2048, deviceScaleFacotr: 1});
 
   //await page.goto('http://google.com');
-  //await page.goto('file://F://GGG//openSW//init_1.js');
   //await page.goto( url );   //  기본세팅임, Puppeteer가 리다이렉트에 대해 안전하지 않다고 판단할 때 발생, (file:// 프로토콜에 대해서 위험하다고 판단하는 듯, google은 잘됨)
   await page.goto( url , { waitUntil: 'networkidle0', timeout: 60000 });  // waitUntil 옵션에서 networkidle0 값을 많이 사용하는 이유는 웹 페이지의 모든 리소스가 로드된 후 추가적인 네트워크 활동이 없을 때까지 기다리기를 원하는 경우가 많기 때문
   
   // desktop
-  //const output_filename = "F://GGG//nodeJS//public//" + path.basename(url) + ".png";
   // notebook-win11
-  const output_filename = "C://GGG//nodejs_ws//nodeJS//public//" + path.basename(url) + ".png";
+  const output_filename = "d://nodeJS//public//" + path.basename(url) + ".png";
   await page.screenshot({
             path: output_filename
             //,fullpage: true
@@ -102,5 +100,5 @@ if (url == null ) url='http://google.com'; // 'file://F://GGG//openSW//init_1.js
   console.log(output_filename);   // 문자열 반환효과
 })();
 
-// F:\GGG\openSW>node init_2param_Public.js.js  http://google.com
+// node init_2param_Public.js.js  http://google.com
 
